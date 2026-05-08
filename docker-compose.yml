@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  ai-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-agent-system
+    ports:
+      - "8000:8000"
+    environment:
+      - PRIMARY_LLM_PROVIDER=deepseek
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - NEMOTRON_API_KEY=${NEMOTRON_API_KEY}
+      - GLM_API_KEY=${GLM_API_KEY}
+      - GEMMA_API_KEY=${GEMMA_API_KEY}
+      - GPT_OSS_API_KEY=${GPT_OSS_API_KEY}
+      - FLUX_API_KEY=${FLUX_API_KEY}
+      - DEBUG=false
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./.env:/app/.env
+    restart: unless-stopped
+    networks:
+      - ai-network
+
+networks:
+  ai-network:
+    driver: bridge
